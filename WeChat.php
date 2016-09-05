@@ -16,15 +16,16 @@ use yii\authclient\OAuth2;
  */
 class WeChat extends OAuth2
 {
-
     /**
      * @inheritdoc
      */
     public $authUrl = 'https://open.weixin.qq.com/connect/qrconnect';
+
     /**
      * @inheritdoc
      */
     public $tokenUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token';
+
     /**
      * @inheritdoc
      */

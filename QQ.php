@@ -15,10 +15,12 @@ class QQ extends OAuth2
      * @inheritdoc
      */
     public $authUrl = 'https://graph.qq.com/oauth2.0/authorize';
+
     /**
      * @inheritdoc
      */
     public $tokenUrl = 'https://graph.qq.com/oauth2.0/token';
+
     /**
      * @inheritdoc
      */
