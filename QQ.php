@@ -6,8 +6,12 @@
  */
 namespace xutl\authclient;
 
+use Yii;
 use yii\web\HttpException;
+use yii\httpclient\Response;
+use yii\authclient\OAuth2;
 use yii\authclient\InvalidResponseException;
+
 
 /**
  * Class QQ
@@ -80,6 +84,7 @@ class QQ extends OAuth2
             ->setUrl($this->tokenUrl)
             ->setData(array_merge($defaultParams, $params));
 
+        /** @var Response $response */
         $response = $request->send();
         if (!$response->getIsOk()) {
             throw new InvalidResponseException($response, 'Request failed with code: ' . $response->getStatusCode() . ', message: ' . $response->getContent());
