@@ -11,10 +11,10 @@ use yii\base\Exception;
 use yii\authclient\OAuth2;
 
 /**
- * Class WeChat
+ * Class Wechat
  * @package xutl\authclient
  */
-class WeChat extends OAuth2
+class Wechat extends OAuth2
 {
     /**
      * @inheritdoc
@@ -71,8 +71,17 @@ class WeChat extends OAuth2
      */
     public function beforeApiRequestSend($event)
     {
-        $event->request->addData(['openid' => $this->getAccessToken()->getParam('openid')]);
+        $event->request->addData(['openid' => $this->getOpenId()]);
         parent::beforeApiRequestSend($event);
+    }
+
+    /**
+     * 返回OpenId
+     * @return mixed
+     */
+    public function getOpenId()
+    {
+        return $this->getAccessToken()->getParam('openid');
     }
 
     /**

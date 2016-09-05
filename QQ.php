@@ -12,12 +12,11 @@ use yii\httpclient\Response;
 use yii\authclient\OAuth2;
 use yii\authclient\InvalidResponseException;
 
-
 /**
- * Class QQ
+ * Class Qq
  * @package xutl\authclient
  */
-class QQ extends OAuth2
+class Qq extends OAuth2
 {
     /**
      * @inheritdoc
