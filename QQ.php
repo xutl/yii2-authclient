@@ -6,9 +6,13 @@
  */
 namespace xutl\authclient;
 
+use yii\web\HttpException;
 use yii\authclient\InvalidResponseException;
 
-
+/**
+ * Class QQ
+ * @package xutl\authclient
+ */
 class QQ extends OAuth2
 {
     /**
@@ -46,20 +50,47 @@ class QQ extends OAuth2
     }
 
     /**
-     * Sends the given HTTP request, returning response data.
-     * @param \yii\httpclient\Request $request HTTP request to be sent.
-     * @return array response data.
-     * @throws InvalidResponseException on invalid remote response.
-     * @since 2.1
+     * Fetches access token from authorization code.
+     * @param string $authCode authorization code, usually comes at $_GET['code'].
+     * @param array $params additional request params.
+     * @return OAuthToken access token.
+     * @throws HttpException on invalid auth state in case [[enableStateValidation]] is enabled.
      */
-    protected function sendRequest($request)
+    public function fetchAccessToken($authCode, array $params = [])
     {
+        if ($this->validateAuthState) {
+            $authState = $this->getState('authState');
+            if (!isset($_REQUEST['state']) || empty($authState) || strcmp($_REQUEST['state'], $authState) !== 0) {
+                throw new HttpException(400, 'Invalid auth state parameter.');
+            } else {
+                $this->removeState('authState');
+            }
+        }
+
+        $defaultParams = [
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'code' => $authCode,
+            'grant_type' => 'authorization_code',
+            'redirect_uri' => $this->getReturnUrl(),
+        ];
+
+        $request = $this->createRequest()
+            ->setMethod('POST')
+            ->setUrl($this->tokenUrl)
+            ->setData(array_merge($defaultParams, $params));
+
         $response = $request->send();
         if (!$response->getIsOk()) {
             throw new InvalidResponseException($response, 'Request failed with code: ' . $response->getStatusCode() . ', message: ' . $response->getContent());
         }
         $this->processResult($response);
-        return $response->getData();
+        $response = $response->getData();
+
+        $token = $this->createToken(['params' => $response]);
+        $this->setAccessToken($token);
+
+        return $token;
     }
 
     /**
