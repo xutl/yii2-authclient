@@ -53,14 +53,12 @@ class QQ extends OAuth2
     protected function sendRequest($request)
     {
         $response = $request->send();
-
         if (!$response->getIsOk()) {
             throw new InvalidResponseException($response, 'Request failed with code: ' . $response->getStatusCode() . ', message: ' . $response->getContent());
         }
         $this->processResult($response);
         return $response->getData();
     }
-
 
     /**
      * @param Response $response

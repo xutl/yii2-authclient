@@ -48,18 +48,16 @@ class WeChat extends OAuth2
      */
     public function buildAuthUrl(array $params = [])
     {
-        $params['appid'] = $this->clientId;
+        $params = array_merge($params, ['appid' => $this->clientId]);
         return parent::buildAuthUrl($params);
     }
-
 
     /**
      * @inheritdoc
      */
     public function fetchAccessToken($authCode, array $params = [])
     {
-        $params['appid'] = $this->clientId;
-        $params['secret'] = $this->clientSecret;
+        $params = array_merge($params, ['appid' => $this->clientId, 'secret' => $this->clientSecret]);
         return parent::fetchAccessToken($authCode, $params);
     }
 
@@ -72,10 +70,7 @@ class WeChat extends OAuth2
      */
     public function beforeApiRequestSend($event)
     {
-        $request = $event->request;
-        $data = $request->getData();
-        $data['openid'] = $this->getAccessToken()->getParam('openid');
-        $request->setData($data);
+        $event->request->addData(['openid' => $this->getAccessToken()->getParam('openid')]);
         parent::beforeApiRequestSend($event);
     }
 
