@@ -1,0 +1,27 @@
+{
+    "name": "xutl/yii2-authclient",
+    "description": "The auth client extension for the Yii framework",
+    "keywords": [
+        "authclient",
+	"qq",
+	"wecaht",
+	"authclient",
+        "auth"
+    ],
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "XuTl",
+            "email": "xutl@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "xutl\\authclient\\": ""
+        }
+    }
+}
