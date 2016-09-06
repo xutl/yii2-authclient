@@ -7,6 +7,7 @@
 namespace xutl\authclient;
 
 use Yii;
+use yii\httpclient\Client;
 use yii\web\HttpException;
 use yii\httpclient\Response;
 use yii\authclient\OAuth2;
@@ -47,64 +48,62 @@ class Qq extends OAuth2
     /**
      * @inheritdoc
      */
-    protected function initUserAttributes()
+    protected function defaultNormalizeUserAttributeMap()
     {
-        return $this->api('oauth2.0/me', 'GET');
+        return [
+            'username' => 'nickname',
+        ];
     }
 
     /**
-     * Fetches access token from authorization code.
-     * @param string $authCode authorization code, usually comes at $_GET['code'].
-     * @param array $params additional request params.
-     * @return OAuthToken access token.
-     * @throws HttpException on invalid auth state in case [[enableStateValidation]] is enabled.
+     * @inheritdoc
      */
-    public function fetchAccessToken($authCode, array $params = [])
+    protected function initUserAttributes()
     {
-        if ($this->validateAuthState) {
-            $authState = $this->getState('authState');
-            if (!isset($_REQUEST['state']) || empty($authState) || strcmp($_REQUEST['state'], $authState) !== 0) {
-                throw new HttpException(400, 'Invalid auth state parameter.');
-            } else {
-                $this->removeState('authState');
-            }
+        $user = $this->api('oauth2.0/me', 'GET');
+        if (isset($user['error'])) {
+            throw new HttpException(400, $user['error'] . ':' . $user['error_description']);
         }
+        $userAttributes = $this->api(
+            "user/get_user_info",
+            'GET',
+            [
+                'oauth_consumer_key' => $user['client_id'],
+                'openid' => $user['openid'],
+            ]
+        );
+        $userAttributes['id'] = $user['openid'];
+        return $userAttributes;
+    }
 
-        $defaultParams = [
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret,
-            'code' => $authCode,
-            'grant_type' => 'authorization_code',
-            'redirect_uri' => $this->getReturnUrl(),
-        ];
-
-        $request = $this->createRequest()
-            ->setMethod('POST')
-            ->setUrl($this->tokenUrl)
-            ->setData(array_merge($defaultParams, $params));
-
-        /** @var Response $response */
+    /**
+     * Sends the given HTTP request, returning response data.
+     * @param \yii\httpclient\Request $request HTTP request to be sent.
+     * @return array response data.
+     * @throws InvalidResponseException on invalid remote response.
+     * @since 2.1
+     */
+    protected function sendRequest($request)
+    {
         $response = $request->send();
         if (!$response->getIsOk()) {
             throw new InvalidResponseException($response, 'Request failed with code: ' . $response->getStatusCode() . ', message: ' . $response->getContent());
         }
         $this->processResult($response);
-        $response = $response->getData();
-
-        $token = $this->createToken(['params' => $response]);
-        $this->setAccessToken($token);
-
-        return $token;
+        return $response->getData();
     }
 
     /**
+     * 处理响应
      * @param Response $response
+     * @throws InvalidResponseException
+     * @since 2.1
      */
     protected function processResult(Response $response)
     {
         $content = $response->getContent();
         if (strpos($content, "callback") !== 0) {
-            return;
+            throw new InvalidResponseException($response, 'Response is not legitimate.');
         }
         $lpos = strpos($content, "(");
         $rpos = strrpos($content, ")");

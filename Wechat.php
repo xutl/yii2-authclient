@@ -47,6 +47,17 @@ class Wechat extends OAuth2
     /**
      * @inheritdoc
      */
+    protected function defaultNormalizeUserAttributeMap()
+    {
+        return [
+            'id' => 'openid',
+            'username' => 'nickname',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function buildAuthUrl(array $params = [])
     {
         $params = array_merge($params, ['appid' => $this->clientId]);
