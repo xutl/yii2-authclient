@@ -96,20 +96,18 @@ class Qq extends OAuth2
     /**
      * 处理响应
      * @param Response $response
-     * @throws InvalidResponseException
      * @since 2.1
      */
     protected function processResult(Response $response)
     {
         $content = $response->getContent();
-        if (strpos($content, "callback") !== 0) {
-            throw new InvalidResponseException($response, 'Response is not legitimate.');
+        if (strpos($content, "callback(") === 0) {
+            $count = 0;
+            $jsonData = preg_replace('/^callback\(\s*(\\{.*\\})\s*\);$/is', '\1', $content, 1, $count);
+            if ($count === 1) {
+                $response->setContent($jsonData);
+            }
         }
-        $lpos = strpos($content, "(");
-        $rpos = strrpos($content, ")");
-        $content = substr($content, $lpos + 1, $rpos - $lpos - 1);
-        $content = trim($content);
-        $response->setContent($content);
     }
 
     /**
