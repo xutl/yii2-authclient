@@ -28,7 +28,6 @@ class Douban extends OAuth2
      */
     public $scope = 'douban_basic_common';
 
-
     /**
      * @inheritdoc
      */
