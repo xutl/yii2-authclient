@@ -31,6 +31,18 @@
 .auth-icon.live {
     background-position: 0 -272px;
 }
+.auth-icon.qq {
+    background-position: 0 -272px;
+}
+.auth-icon.weibo {
+    background-position: 0 -272px;
+}
+.auth-icon.wechat {
+    background-position: 0 -272px;
+}
+.auth-icon.douban {
+    background-position: 0 -272px;
+}
 
 .auth-clients {
     display: block;
