@@ -6,6 +6,7 @@
  */
 namespace xutl\authclient;
 
+use Yii;
 use yii\authclient\OAuth2;
 
 class Douban extends OAuth2
@@ -55,7 +56,7 @@ class Douban extends OAuth2
      * @inheritdoc
      */
     protected function defaultTitle() {
-        return '豆瓣';
+        return Yii::t('app','Douban');
     }
 
     protected function defaultViewOptions() {

@@ -116,7 +116,7 @@ class Wechat extends OAuth2
      */
     protected function defaultTitle()
     {
-        return '微信';
+        return Yii::t('app','Wechat');
     }
 
     /**

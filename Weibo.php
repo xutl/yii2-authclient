@@ -6,6 +6,7 @@
  */
 namespace xutl\authclient;
 
+use Yii;
 use yii\authclient\OAuth2;
 
 class Weibo extends OAuth2
@@ -67,7 +68,7 @@ class Weibo extends OAuth2
      */
     protected function defaultTitle()
     {
-        return '微博';
+        return Yii::t('app', 'Weibo');
     }
 
     /**
