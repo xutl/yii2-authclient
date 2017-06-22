@@ -17,12 +17,12 @@
      /**
       * @inheritdoc
       */
-     public $authUrl = 'http://api.yuncms.net/oauth2/authorize';
+     public $authUrl = 'http://www.yuncms.net/oauth2/auth/authorize';
 
      /**
       * @inheritdoc
       */
-     public $tokenUrl = 'http://api.yuncms.net/oauth2/token';
+     public $tokenUrl = 'http://www.yuncms.net/oauth2/auth/token';
 
      /**
       * @inheritdoc
