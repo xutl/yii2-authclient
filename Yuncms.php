@@ -27,14 +27,14 @@
      /**
       * @inheritdoc
       */
-     public $apiBaseUrl = 'http://api.yuncms.net/v1';
+     public $apiBaseUrl = 'http://api.yuncms.net';
 
      /**
       * @inheritdoc
       */
      protected function initUserAttributes()
      {
-         return $this->api('me', 'GET');
+         return $this->api('user/account/index', 'GET');
      }
 
      /**
