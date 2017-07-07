@@ -12,7 +12,7 @@ use yii\base\Exception;
 use yii\authclient\OAuth2;
 
 /**
- * Class Wechat
+ * PC端微信二维码登录
  * @package xutl\authclient
  */
 class Wechat extends OAuth2
@@ -21,7 +21,7 @@ class Wechat extends OAuth2
      * @inheritdoc
      */
     public $authUrl = 'https://open.weixin.qq.com/connect/qrconnect';
-    
+
     /**
      * @inheritdoc
      */
@@ -38,17 +38,10 @@ class Wechat extends OAuth2
     public function init()
     {
         parent::init();
-        if (strpos(Yii::$app->request->userAgent, 'MicroMessenger') !== false) {//微信内打开的
-            $this->authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize';
+        if ($this->scope === null) {
             $this->scope = implode(',', [
-                'snsapi_base', 'snsapi_userinfo'
+                'snsapi_login',
             ]);
-        } else {//PC扫码登录
-            if ($this->scope === null) {
-                $this->scope = implode(',', [
-                    'snsapi_login',
-                ]);
-            }
         }
     }
 

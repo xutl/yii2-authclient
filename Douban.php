@@ -4,6 +4,7 @@
  * @copyright Copyright (c) 2012 TintSoft Technology Co. Ltd.
  * @license http://www.tintsoft.com/license/
  */
+
 namespace xutl\authclient;
 
 use Yii;
@@ -31,7 +32,8 @@ class Douban extends OAuth2
     /**
      * @inheritdoc
      */
-    protected function initUserAttributes() {
+    protected function initUserAttributes()
+    {
         return $this->api('v2/user/~me', 'GET');
     }
 
@@ -47,18 +49,21 @@ class Douban extends OAuth2
     /**
      * @inheritdoc
      */
-    protected function defaultName() {
+    protected function defaultName()
+    {
         return 'douban';
     }
 
     /**
      * @inheritdoc
      */
-    protected function defaultTitle() {
-        return Yii::t('app','Douban');
+    protected function defaultTitle()
+    {
+        return Yii::t('app', 'Douban');
     }
 
-    protected function defaultViewOptions() {
-        return [ 'popupWidth'=> 1000, 'popupHeight'=> 500 ];
+    protected function defaultViewOptions()
+    {
+        return ['popupWidth' => 1000, 'popupHeight' => 500];
     }
 }
