@@ -57,9 +57,7 @@ class Wechat extends OAuth2
         if ($this->useMp) {
             $this->authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize';
             if ($this->scope === null) {
-                $this->scope = implode(',', [
-                    'snsapi_userinfo',
-                ]);
+                $this->scope = 'snsapi_userinfo';
             }
         } else {
             if ($this->scope === null) {
