@@ -44,27 +44,15 @@ class Wechat extends OAuth2
     public $useOpenId = true;
 
     /**
-     * @var bool 是否是微信公众平台
-     */
-    public $useMp = false;
-
-    /**
      * @inheritdoc
      */
     public function init()
     {
         parent::init();
-        if ($this->useMp) {
-            $this->authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize';
-            if ($this->scope === null) {
-                $this->scope = 'snsapi_userinfo';
-            }
-        } else {
-            if ($this->scope === null) {
-                $this->scope = implode(',', [
-                    'snsapi_login',
-                ]);
-            }
+        if ($this->scope === null) {
+            $this->scope = implode(',', [
+                'snsapi_login',
+            ]);
         }
     }
 
@@ -84,34 +72,6 @@ class Wechat extends OAuth2
                 'username' => 'nickname',
             ];
         }
-    }
-
-    /**
-     * Composes user authorization URL.
-     * @param array $params additional auth GET params.
-     * @return string authorization URL.
-     */
-    public function buildAuthUrl(array $params = [])
-    {
-        $defaultParams = [
-            'appid' => $this->clientId,
-            'redirect_uri' => $this->getReturnUrl(),
-            'response_type' => 'code',
-        ];
-        if (!empty($this->scope)) {
-            $defaultParams['scope'] = $this->scope;
-        }
-
-        if ($this->validateAuthState) {
-            $authState = $this->generateAuthState();
-            $this->setState('authState', $authState);
-            $defaultParams['state'] = $authState;
-        }
-        $authUrl = $this->composeUrl($this->authUrl, array_merge($defaultParams, $params));
-        if ($this->useMp) {
-            return $authUrl . '#wechat_redirect';
-        }
-        return $authUrl;
     }
 
     /**
