@@ -75,6 +75,17 @@ class Wechat extends OAuth2
     }
 
     /**
+     * Composes user authorization URL.
+     * @param array $params additional auth GET params.
+     * @return string authorization URL.
+     */
+    public function buildAuthUrl(array $params = [])
+    {
+        $params['appid'] = $this->clientId;
+        return parent::buildAuthUrl($params);
+    }
+
+    /**
      * @inheritdoc
      */
     public function fetchAccessToken($authCode, array $params = [])
