@@ -81,8 +81,23 @@ class Wechat extends OAuth2
      */
     public function buildAuthUrl(array $params = [])
     {
-        $params['appid'] = $this->clientId;
-        return parent::buildAuthUrl($params);
+        $defaultParams = [
+            'appid' => $this->clientId,
+            'response_type' => 'code',
+            'redirect_uri' => $this->getReturnUrl(),
+            'xoauth_displayname' => Yii::$app->name,
+        ];
+        if (!empty($this->scope)) {
+            $defaultParams['scope'] = $this->scope;
+        }
+
+        if ($this->validateAuthState) {
+            $authState = $this->generateAuthState();
+            $this->setState('authState', $authState);
+            $defaultParams['state'] = $authState;
+        }
+
+        return $this->composeUrl($this->authUrl, array_merge($defaultParams, $params));
     }
 
     /**
