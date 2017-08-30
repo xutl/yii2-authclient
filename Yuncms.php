@@ -17,12 +17,12 @@
      /**
       * @inheritdoc
       */
-     public $authUrl = 'http://www.yuncms.net/oauth2/auth/authorize';
+     public $authUrl = 'http://api.yuncms.net/auth/authorize';
 
      /**
       * @inheritdoc
       */
-     public $tokenUrl = 'http://www.yuncms.net/oauth2/auth/token';
+     public $tokenUrl = 'http://api.yuncms.net/auth/token';
 
      /**
       * @inheritdoc
@@ -34,7 +34,7 @@
       */
      protected function initUserAttributes()
      {
-         return $this->api('user/account/index', 'GET');
+         return $this->api('v1/account/index', 'GET');
      }
 
      /**
