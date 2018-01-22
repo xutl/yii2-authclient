@@ -16,7 +16,7 @@ use yii\authclient\OAuth2;
  * PC端微信二维码登录
  * @package xutl\authclient
  */
-class Wechat extends OAuth2
+class WeChat extends OAuth2
 {
     /**
      * @inheritdoc
@@ -157,6 +157,7 @@ class Wechat extends OAuth2
      * Gets new auth token to replace expired one.
      * @param OAuthToken $token expired auth token.
      * @return OAuthToken new auth token.
+     * @throws \yii\authclient\InvalidResponseException
      */
     public function refreshAccessToken(OAuthToken $token)
     {

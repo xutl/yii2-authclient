@@ -6,18 +6,16 @@
  */
 namespace xutl\authclient;
 
-use Yii;
-use yii\httpclient\Client;
 use yii\web\HttpException;
 use yii\httpclient\Response;
 use yii\authclient\OAuth2;
 use yii\authclient\InvalidResponseException;
 
 /**
- * Class Qq
+ * Class QQ
  * @package xutl\authclient
  */
-class Qq extends OAuth2
+class QQ extends OAuth2
 {
     /**
      * @inheritdoc
@@ -81,6 +79,7 @@ class Qq extends OAuth2
      * @param \yii\httpclient\Request $request HTTP request to be sent.
      * @return array response data.
      * @throws InvalidResponseException on invalid remote response.
+     * @throws \yii\httpclient\Exception
      * @since 2.1
      */
     protected function sendRequest($request)

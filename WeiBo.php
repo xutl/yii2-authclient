@@ -9,7 +9,11 @@ namespace xutl\authclient;
 use Yii;
 use yii\authclient\OAuth2;
 
-class Weibo extends OAuth2
+/**
+ * Class WeiBo
+ * @package xutl\authclient
+ */
+class WeiBo extends OAuth2
 {
     /**
      * @inheritdoc
