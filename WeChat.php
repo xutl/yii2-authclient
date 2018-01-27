@@ -50,9 +50,7 @@ class WeChat extends OAuth2
     {
         parent::init();
         if ($this->scope === null) {
-            $this->scope = implode(',', [
-                'snsapi_login',
-            ]);
+            $this->scope = 'snsapi_login';
         }
     }
 
@@ -61,17 +59,10 @@ class WeChat extends OAuth2
      */
     protected function defaultNormalizeUserAttributeMap()
     {
-        if ($this->useOpenId) {
-            return [
-                'id' => 'openid',
-                'username' => 'nickname',
-            ];
-        } else {
-            return [
-                'id' => 'unionid',
-                'username' => 'nickname',
-            ];
-        }
+        return [
+            'id' => $this->useOpenId ? 'openid' : 'unionid',
+            'username' => 'nickname',
+        ];
     }
 
     /**
@@ -101,25 +92,15 @@ class WeChat extends OAuth2
     }
 
     /**
-     * @inheritdoc
+     * @param \yii\httpclient\Request $request HTTP request instance.
+     * @param OAuthToken $accessToken access token instance.
      */
-    public function fetchAccessToken($authCode, array $params = [])
+    public function applyAccessTokenToRequest($request, $accessToken)
     {
-        $params = array_merge($params, ['appid' => $this->clientId, 'secret' => $this->clientSecret]);
-        return parent::fetchAccessToken($authCode, $params);
-    }
-
-    /**
-     * Handles [[Request::EVENT_BEFORE_SEND]] event.
-     * Applies [[accessToken]] to the request.
-     * @param \yii\httpclient\RequestEvent $event event instance.
-     * @throws Exception on invalid access token.
-     * @since 2.1
-     */
-    public function beforeApiRequestSend($event)
-    {
-        $event->request->addData(['openid' => $this->getOpenId()]);
-        parent::beforeApiRequestSend($event);
+        $data = $request->getData();
+        $data['access_token'] = $accessToken->getToken();
+        $data['openid'] = $accessToken->getParam('openid');
+        $request->setData($data);
     }
 
     /**
